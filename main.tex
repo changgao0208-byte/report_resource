@@ -1,0 +1,351 @@
+% ╔══════════════════════════════════════════════════════════════════════╗
+% ║  NLP Corpus Analysis — Group Report                                  ║
+% ║  ACL Format | Text Analytics Coursework                              ║
+% ╚══════════════════════════════════════════════════════════════════════╝
+%
+% ── HOW TO USE ────────────────────────────────────────────────────────────
+%  1. Upload main.tex + references.bib + acl.sty + acl_natbib.bst to Overleaf
+%  2. Upload your figures to the figures/ folder in Overleaf
+%  3. Each member edits ONLY their own \begin{block}...\end{block}
+%  4. Delete all \TODO{} markers before submitting
+%  5. Do NOT change \documentclass, font, or margins
+%
+% ── PAGE BUDGET ───────────────────────────────────────────────────────────
+%  Rubric:   Abstract 0.25p | Intro 1.5p | Methods 3.5p | Eval 3.5p | Concl 1p
+%  Figures/tables occupy space inside these pages.
+%  Estimate: every full-width figure ≈ 0.35p; every half-column figure ≈ 0.20p;
+%            every small table ≈ 0.15p.
+%
+%  Target word counts assume ~2 pages of figures/tables across the whole paper:
+%  ┌──────────────────┬──────────┬──────────────────────────────┐
+%  │ Section          │ Pages    │ Target words (text only)     │
+%  ├──────────────────┼──────────┼──────────────────────────────┤
+%  │ Abstract         │ 0.25     │ ~160w  (Member 5)            │
+%  │ Introduction     │ 1.5      │ ~800w  (all 4 share ~200w)   │
+%  │ Methods          │ 3.5      │ ~1,800w (~360w per member)   │
+%  │ Eval             │ 3.5      │ ~1,500w (~300w per member)   │
+%  │ Conclusions      │ 1.0      │ ~600w  (~120w per member)    │
+%  ├──────────────────┼──────────┼──────────────────────────────┤
+%  │ Per member total │          │ ~980–1,040w                  │
+%  └──────────────────┴──────────┴──────────────────────────────┘
+%
+% ── FIGURE FORMATTING RULES (ALL MEMBERS) ─────────────────────────────────
+%  • Minimum font inside figure: 9pt (must be readable without zooming at A4)
+%  • Minimum resolution: 200 dpi
+%  • Prefer PDF format for vector graphics; PNG for raster
+%  • Single-column figure: use {figure} environment, width=\linewidth
+%  • Full-width figure:    use {figure*} environment, width=\linewidth
+%  • Caption: Figure N. Brief description ending with a period.
+%
+%  Copy this template when inserting a figure:
+%
+%    \begin{figure}[t]            % use figure* for full-width
+%      \centering
+%      \includegraphics[width=\linewidth]{figures/YOUR_FILE.pdf}
+%      \caption{Caption text.}
+%      \label{fig:YOUR_LABEL}
+%    \end{figure}
+%
+% ── TABLE FORMATTING RULES (ALL MEMBERS) ──────────────────────────────────
+%  • Use booktabs: \toprule \midrule \bottomrule (no vertical lines)
+%  • Font: \small inside table
+%  • Caption: Table N. Brief description.
+%
+%  Copy this template when inserting a table:
+%
+%    \begin{table}[t]
+%      \centering\small
+%      \begin{tabular}{lcc}   % adjust columns as needed
+%        \toprule
+%        \textbf{Col A} & \textbf{Col B} & \textbf{Col C} \\
+%        \midrule
+%        row 1          & val          & val \\
+%        \bottomrule
+%      \end{tabular}
+%      \caption{Caption text.}
+%      \label{tab:YOUR_LABEL}
+%    \end{table}
+%
+% ── CITATION RULES ────────────────────────────────────────────────────────
+%  Add BibTeX entries to references.bib, then:
+%    \citep{key}  →  (Author, Year)     parenthetical
+%    \citet{key}  →  Author (Year)      textual
+%  References section does NOT count toward the 10-page limit.
+% ═══════════════════════════════════════════════════════════════════════════
+
+\documentclass[11pt]{article}
+\usepackage[review]{acl}      % sets 11pt font, 2.5cm margins automatically
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{xcolor}
+
+\graphicspath{{figures/}}
+\bibliographystyle{acl_natbib}
+
+% Helper commands — DELETE before submitting
+\newcommand{\TODO}[2]{\noindent\textcolor{red}{\textbf{[#1]}}\textcolor{gray}{\small\textit{ (~#2 words)}}\medskip}
+\newcommand{\WC}[1]{\noindent\textcolor{gray}{\footnotesize[Target: #1 words]}\smallskip}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\title{How Has NLP Research Changed? \\
+A Comparative Corpus Analysis of arXiv Abstracts, 1991--2021}
+
+\author{%
+  Member 1 \quad Member 2 \quad Member 3 \quad Member 4 \quad Member 5 \\
+  Text Analytics Coursework}
+
+\begin{document}
+\maketitle
+
+% ═══════════════════════════════════════════════════════════════════════════
+% ABSTRACT   Target: ~160 words | Owner: Member 5 | Write LAST
+% ═══════════════════════════════════════════════════════════════════════════
+\begin{abstract}
+\TODO{Member 5 — write after all other sections are finalised.
+State: (1) the research question; (2) corpus and scale;
+(3) the two analytic axes and methods tested;
+(4) the key finding on which methods agree.
+Maximum 160 words. Do not copy from the introduction.}{160}
+\end{abstract}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+% 1. INTRODUCTION   Target: ~800 words total | ~200 words per member
+%    Rubric: task, motivations, data, requirements, optional examples/plots
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+\label{sec:intro}
+
+% ── Member 1: Task and motivation ─────────────────────────────────────────
+% Why studying the evolution of NLP research framing matters.
+% End with the explicit research question this project answers.
+\TODO{Member 1 — Task and motivation (~200w).
+Why does tracking how NLP research is framed and communicated matter?
+End paragraph with the research question.}{200}
+
+% ── Member 2: Available data ──────────────────────────────────────────────
+% Describe the corpus: source, size, time range, period binning,
+% and any notable characteristics (e.g. class imbalance).
+% Add a data exploration figure or table here if you wish.
+\TODO{Member 2 — Available data (~200w).
+Describe the arXiv cs.CL corpus: source, N, 1991--2021,
+7 five-year bins, notable characteristics.
+Include a figure or table if it helps (see formatting rules above).}{200}
+
+% ── Member 3: Requirements for a good solution ───────────────────────────
+% What properties must a method have to answer the research question well?
+% Use these requirements to motivate the two analytic axes.
+\TODO{Member 3 — Requirements for a good solution (~200w).
+List 3--4 properties a good method must have.
+Use them to motivate the two axes introduced in Section~\ref{sec:methods}.}{200}
+
+% ── Member 4: Dataset examples ────────────────────────────────────────────
+% Paraphrase one or two concrete abstracts (early vs late) to show the reader
+% what the vocabulary shift looks like. Add a figure if helpful.
+\TODO{Member 4 — Dataset examples (~200w).
+Paraphrase one early (1991--2005) and one recent (2016--2021) abstract.
+Identify 2--3 concrete differences in framing and vocabulary.
+A figure illustrating the vocabulary shift is optional but encouraged.}{200}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+% 2. METHODS   Target: ~1,800 words total | ~360 words per member
+%    Rubric 3a: baseline + preprocessing + representations
+%    Rubric 3b: axes of experimentation
+%    Rubric 3c: proposed improvements + hypotheses
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Methods}
+\label{sec:methods}
+
+% ── Member 1: Preprocessing and TF-IDF baseline (Rubric 3a) ──────────────
+% Describe the preprocessing pipeline (NB00) and the TF-IDF baseline.
+% Include the TF-IDF equation. State vocabulary sizes.
+% Justify design choices. Add a figure if it clarifies the pipeline.
+\TODO{Member 1 — Preprocessing + TF-IDF baseline (~360w, Rubric 3a).
+Cover: pipeline overview, preprocessing steps (lowercasing, tokenisation,
+stopword removal, etc.), TF-IDF unigram baseline (include Eq.~1, vocabulary
+size, hyperparameters), TF-IDF bigram as first axis alternative.
+Justify each choice.}{360}
+
+\begin{equation}
+  \mathrm{TF\text{-}IDF}(t,d) =
+    \mathrm{tf}(t,d)\cdot\log\!\frac{N}{\bigl|\{d':t\in d'\}\bigr|}
+  \label{eq:tfidf}
+\end{equation}
+
+% ── Member 2: Semantic representations (Rubric 3a + 3c) ──────────────────
+% Describe SBERT and LDA as proposed improvements over TF-IDF.
+% State hypotheses about how each will perform differently.
+\TODO{Member 2 — SBERT and LDA representations (~360w, Rubric 3a + 3c).
+Explain SBERT (cite model and paper): output dimensionality, why it captures
+semantic drift beyond vocabulary overlap.
+Explain LDA (cite paper): number of topics K, how K was chosen,
+what the topic-proportion vector represents.
+State a hypothesis for each: how do you expect it to differ from TF-IDF?}{360}
+
+% ── Member 3: Keyword shift axis (Rubric 3b + 3c) ────────────────────────
+% Describe the keyword shift comparison method.
+% State a clear hypothesis about what it will reveal.
+\TODO{Member 3 — Keyword shift method and hypothesis (~360w, Rubric 3b + 3c).
+Explain: how top-N terms per period are extracted, how term frequency is
+normalised, what ``emerging'' vs ``disappearing'' vocabulary means operationally.
+State hypothesis: what signal do you expect keyword shifts to reveal that
+other methods cannot?
+You may include a figure illustrating the method design.}{360}
+
+% ── Member 4: Cosine distance axis (Rubric 3b + 3c) ──────────────────────
+% Describe the cosine distance comparison method.
+% State a clear hypothesis about what it will reveal.
+\TODO{Member 4 — Cosine distance method and hypothesis (~360w, Rubric 3b + 3c).
+Explain: how period centroids are computed, why cosine distance is appropriate
+for high-dimensional text vectors, how it differs from keyword shift.
+State hypothesis: what signal do you expect cosine distance to detect
+that keyword shift misses?
+You may include a figure illustrating the method design.}{360}
+
+% ── Member 5: Dimensionality reduction design (Rubric 3a + 3c) ───────────
+% Describe PCA and UMAP as visualisation methods.
+% Justify the two-stage SVD→PCA pipeline for TF-IDF.
+% State a hypothesis comparing PCA and UMAP.
+\TODO{Member 5 — Dimensionality reduction design (~360w, Rubric 3a + 3c).
+Explain the two-stage SVD(k=50)→PCA(2D) pipeline for sparse TF-IDF matrices:
+why direct PCA is infeasible on sparse data; SVD as LSA; justify k choice.
+Explain direct PCA for dense matrices (SBERT, LDA).
+Explain UMAP as non-linear alternative; pipeline for each matrix type;
+sensitivity to n\_neighbors.
+State hypothesis: PCA vs UMAP — what does each reveal?
+Include the explained-variance plot if it supports the k=50 justification.}{360}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+% 3. EXPERIMENTAL EVALUATION   Target: ~1,500 words total | ~300w per member
+%    Rubric 4a: metrics and their limitations
+%    Rubric 4b: experimental setup
+%    Rubric 4c: results with interpretation
+%    Rubric 4d: error analysis
+%    Rubric 4e: discussion, strengths/limitations, recommendations
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Experimental Evaluation}
+\label{sec:eval}
+
+% ── Member 1: Axis 1 TF-IDF results (Rubric 4a + 4b + 4c + 4d) ──────────
+% Report and interpret the TF-IDF trajectory results.
+% Include figures and/or tables you think best present these findings.
+% Analyse errors or patterns where TF-IDF produces unexpected results.
+\TODO{Member 1 — Axis 1 TF-IDF results (~300w, Rubric 4a--4d).
+State the metric(s) you use and their limitations for TF-IDF trajectories.
+Describe how hyperparameters were set.
+Present your main TF-IDF findings (add a figure or table if helpful).
+Identify patterns where TF-IDF produces misleading or surprising results.}{300}
+
+% ── Member 2: Axis 1 SBERT + LDA results (Rubric 4a + 4b + 4c + 4d) ─────
+% Report and interpret the SBERT and LDA trajectory results.
+% Include figures and/or tables you think best present these findings.
+% Analyse where these methods succeed or fail compared to TF-IDF.
+\TODO{Member 2 — Axis 1 SBERT + LDA results (~300w, Rubric 4a--4d).
+State the metric(s) you use and their limitations for dense representations.
+Describe how K (LDA) and the SBERT model were chosen.
+Present your main SBERT and LDA findings (add a figure or table if helpful).
+Where do these methods agree with or diverge from TF-IDF, and why?}{300}
+
+% ── Member 3: Axis 2A keyword shift results (Rubric 4a + 4b + 4c + 4d) ──
+% Report and interpret the keyword shift results.
+% Include figures and/or tables you think best present these findings.
+% Analyse errors: where does keyword shift produce misleading results?
+\TODO{Member 3 — Axis 2A keyword shift results (~300w, Rubric 4a--4d).
+State the metric(s) used and their limitations.
+Describe the experimental setup: N chosen, period pairs compared, normalisation.
+Present your main keyword findings (add a figure if helpful — e.g., top-N
+shift chart, term frequency timeline).
+Error analysis: generic terms? class imbalance bias? writing-convention artefacts?}{300}
+
+% ── Member 4: Axis 2B cosine distance results (Rubric 4a + 4b + 4c + 4d) ─
+% Report and interpret the cosine distance results.
+% Include figures and/or tables you think best present these findings.
+% Analyse errors: where does cosine distance produce misleading results?
+\TODO{Member 4 — Axis 2B cosine distance results (~300w, Rubric 4a--4d).
+State the metric(s) used and their limitations.
+Describe the setup: centroid computation, distance formula, matrices used.
+Present your main cosine distance findings (add a figure if helpful — e.g.,
+cosine distance timeline).
+Error analysis: centroid averaging masking heterogeneity? minimum-distance period?
+How do results compare with keyword shift (Member 3)?}{300}
+
+% ── Member 5: Discussion, strengths, limitations (Rubric 4e) ─────────────
+% Synthesise all findings. Compare Axis 1 methods with each other.
+% Compare Axis 2 methods with each other.
+% State which method best balances consistency and interpretability.
+% Discuss limitations of the overall approach.
+% Add an evaluation table if you think it clarifies the comparison.
+\TODO{Member 5 — Discussion and limitations (~300w, Rubric 4e).
+Cross-method comparison: do Axis 1 methods agree on the breakpoint period?
+Do Axis 2 methods agree on the same breakpoint?
+Where methods disagree, explain why.
+Add an evaluation table (Consistency / Interpretability / Alignment with NLP history)
+if you judge it helpful.
+List 4--6 specific limitations of the overall approach (one sentence each):
+e.g. TF-IDF misses synonym drift; SBERT is uninterpretable; class imbalance
+biases centroids; UMAP is stochastic.}{300}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+% 4. CONCLUSIONS   Target: ~600 words total | ~120 words per member
+%    Rubric: key findings, what worked, what did not, open challenges
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Conclusions}
+\label{sec:conclusions}
+
+% Each member writes one paragraph (~120 words) addressing:
+%   • The key finding from their axis/method
+%   • One specific open challenge they identified
+% Member 5 also writes a brief synthesis paragraph (~120w) to open and close.
+
+% ── Member 5: opening synthesis (first paragraph) ─────────────────────────
+\TODO{Member 5 — Opening synthesis paragraph (~120w).
+Directly answer the research question:
+how has NLP research changed from 1991 to 2021?
+State the period of dominant transition and whether all methods agree.}{120}
+
+% ── Member 1: TF-IDF findings + open challenge ───────────────────────────
+\TODO{Member 1 — (~120w).
+What the TF-IDF analysis revealed about NLP's evolution.
+Name one open challenge: e.g. how to handle vocabulary change
+that is driven by synonyms rather than new terms.}{120}
+
+% ── Member 2: SBERT + LDA findings + open challenge ──────────────────────
+\TODO{Member 2 — (~120w).
+What SBERT and LDA revealed that TF-IDF could not.
+Name one open challenge: e.g. how to interpret the direction
+of change in embedding space without probing experiments.}{120}
+
+% ── Member 3: Keyword findings + open challenge ───────────────────────────
+\TODO{Member 3 — (~120w).
+What keyword shift analysis revealed about specific vocabulary transitions.
+Name one open challenge: e.g. evaluating whether a rising term signals
+a genuine research shift or a change in writing convention.}{120}
+
+% ── Member 4: Cosine distance findings + open challenge ───────────────────
+\TODO{Member 4 — (~120w).
+What cosine distance analysis revealed about the timing of semantic drift.
+Name one open challenge: e.g. how to distinguish genuine period-level
+shift from noise caused by corpus size imbalance.}{120}
+
+% ── Member 5: forward look (final paragraph) ──────────────────────────────
+\TODO{Member 5 — Forward look (~120w).
+What worked well overall and what did not.
+Name one concrete extension that would most improve this analysis
+(one sentence). End with a closing statement.}{120}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+% REFERENCES  (not counted in the 10-page limit)
+% Add BibTeX entries to references.bib and cite with \citep{} or \citet{}
+% ═══════════════════════════════════════════════════════════════════════════
+\bibliographystyle{acl_natbib}
+\bibliography{custom}
+
+\end{document}
