@@ -1,0 +1,376 @@
+WRITING GUIDANCE FOR ALL MEMBERS
+NLP Corpus Analysis — Group Report
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Read Part A before writing anything.
+Parts B and C are for your specific section.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART A — FOUR CONSISTENCY RULES
+         (apply to every section, enforced through writing alone)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+With five people writing in parallel, the report can quietly become
+inconsistent in three places: what we predicted, what we found, and
+what we call things. 
+
+
+RULE 1 — A HYPOTHESIS IS ONLY USEFUL IF IT IS COMPARATIVE
+
+Before describing how your method works, say what you expect it to
+reveal and why — specifically in relation to the other methods in
+the same axis. The expectation does not need to appear in any
+particular sentence or position; it just needs to be there, clearly,
+before the implementation details arrive.
+
+What makes a hypothesis genuinely useful is the contrast. "We expect
+SBERT to capture semantic drift" tells the reader nothing. "We expect
+SBERT to capture shifts in meaning that occur even when vocabulary
+remains stable — something TF-IDF cannot detect by design" tells them
+exactly what distinguishes your method and what evidence would confirm
+or undermine it.
+
+A practical check: after writing your Methods paragraph, ask yourself
+whether a reader could predict, from your hypothesis alone, what your
+result would look like if your method worked and what it would look
+like if it did not. If not, the hypothesis is not specific enough.
+
+The seven methods requiring hypotheses, and who is responsible:
+  TF-IDF Unigram    — Member 1
+  TF-IDF Bigram     — Member 1
+  SBERT             — Member 2
+  LDA               — Member 2
+  Keyword shift     — Member 3
+  Cosine distance   — Member 4
+  PCA vs. UMAP      — Member 5
+
+
+RULE 2 — RESULTS MUST ANSWER THE HYPOTHESIS, NOT JUST DESCRIBE A PLOT
+
+When you write your Results paragraph, your reader has already read
+your hypothesis. They want to know: were you right? The most common
+failure in student reports is a Results section that describes what
+the figure shows but never states whether the prediction came true.
+
+You do not need a formulaic confirmation sentence. You do need to make
+the connection explicit — whether the method did what you expected,
+partially did it, or did something unexpected instead. If your results
+surprised you, say so and try to explain why. Unexpected findings are
+often the most interesting ones, and the rubric rewards you for
+thinking through them rather than glossing over them.
+
+After addressing your own hypothesis, add three short observations —
+they can appear anywhere in the paragraph, in any order, in whatever
+phrasing fits the surrounding prose:
+
+  One sentence on consistency: does your finding agree with what
+  another method found? Name that method and its section reference.
+
+  One sentence on interpretability: can a reader understand what
+  drove the change from your output alone, or does it require
+  additional analysis? Be honest — SBERT and UMAP are harder to
+  interpret than TF-IDF and keyword shift, and that is a legitimate
+  limitation worth acknowledging.
+
+  One sentence on alignment with known NLP history: does your
+  finding match what we know happened in the field? Cite something.
+  The transformer era, the deep learning shift, the move from
+  rule-based to statistical methods — these are documented and your
+  data should either support or complicate them.
+
+Close your Results section with a sentence that answers the research
+question from your method's point of view. Not a summary of the
+figure — a direct statement about how NLP research changed, and when.
+
+
+RULE 3 — AGREE ON SHARED TERMS BEFORE WRITING, THEN USE THEM EXACTLY
+
+Inconsistent naming is invisible to the person writing but immediately
+noticeable to a reader who has read all five sections. "Topic model",
+"LDA model", and "LDA" all refer to the same thing, but in a report
+written by five people they will appear as three different methods
+unless everyone consciously aligns.
+
+Use these terms and no others without checking in the group first:
+
+  Axis 1 (text representation)
+  Axis 2 (comparison method)
+
+  TF-IDF Unigram  |  TF-IDF Bigram  |  SBERT  |  LDA
+  keyword shift analysis  |  cosine distance
+  PCA  |  UMAP
+
+  Period names: 1991--1995, 1996--2000, 2001--2005,
+                2006--2010, 2011--2015, 2016--2021
+  The breakpoint: the 2011--2015 to 2016--2021 transition
+
+  Evaluation criteria (use these exact nouns when evaluating):
+    consistency  |  interpretability  |  alignment with known NLP history
+
+When cross-referencing another member's section, use \ref{} to their
+subsection label rather than "Member 3's analysis" or similar.
+Overleaf automatically generates the correct section number.
+
+
+RULE 4 — READ THE PRECEDING SECTION BEFORE WRITING YOURS
+
+The Methods section is written in this order:
+  Member 1 → Member 2 → Member 3 → Member 4 → Member 5
+
+Before you write, read what came before you, even if it is still a
+\TODO block. Three things to check:
+
+  Numbers: are the corpus statistics (N, time range, period bins)
+  the same as what you plan to use? If they differ, one of you has
+  the wrong figure — resolve it before writing further.
+
+  Bridges: does the preceding section end in a way that leaves your
+  section without a logical entry point? If so, open with one
+  sentence that connects the two, using \ref{} to link back.
+
+  Overlap: are you about to say something the previous member has
+  already said? If so, either cut it from your section or reframe
+  it as an extension rather than a repetition.
+
+If the section before yours is not written yet, add a short comment
+in Overleaf at any point where you would normally cross-reference,
+so you can fill it in once they finish:
+  % link to Member N here once written
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART B — UNIVERSAL REQUIREMENTS FOR ALL MEMBERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The rubric awards marks for evaluating each method on consistency,
+interpretability, and alignment with known NLP history (points 4a,
+4b, 4c). These evaluations must appear in your Results section, not
+only in Member 5's Discussion. The Discussion should synthesise
+what you each said, not introduce it for the first time.
+
+You also need to answer the research question from your method's
+perspective (rubric point 3). The question is: how has NLP research
+changed? Your method should contribute something specific to that
+answer — a transition period it identified, a type of change it
+revealed, or a limitation it exposed.
+
+In practice this means every Results section should contain, in
+natural prose and in whatever order works for your argument:
+  — whether your hypothesis was confirmed and why
+  — whether your finding agrees with at least one other method
+  — how interpretable your output is and what limits it
+  — how your finding relates to a documented event in NLP history
+  — what your method contributes to the answer to the research question
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART C — MEMBER-SPECIFIC ADJUSTMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MEMBER 1
+
+  Introduction:
+    Your paragraph is the anchor for the whole report. Every other
+    member will read it before writing their own section, and the
+    marker will read it before reading anything else. The last thing
+    it should do is introduce both analytic axes — name them and
+    briefly say what each one varies. This does not need to be a
+    formal definition; a single clear sentence is enough to orient
+    the reader for everything that follows.
+
+  Methods:
+    You are writing the baseline, which means your role is partly
+    to define the starting point that all other methods depart from.
+    Explain why TF-IDF Unigram is the baseline rather than one of
+    the improvements — what properties make it a sensible reference?
+    Your hypothesis for TF-IDF Bigram should be written in relation
+    to TF-IDF Unigram, not in relation to SBERT or LDA, because
+    bigram is the closest alternative to the baseline and the most
+    natural first comparison.
+
+  Results:
+    When you discuss consistency, mention keyword shift analysis
+    specifically — your lexical trajectory findings and Member 3's
+    keyword findings are measuring related things and the reader
+    will want to know whether they agree.
+
+
+MEMBER 2
+
+  Introduction:
+    Match the corpus statistics from Member 1's paragraph exactly.
+    If Member 1 has not written yet, add a note to yourself and
+    reconcile the numbers before submission.
+
+  Methods:
+    Your two methods — SBERT and LDA — represent different ideas
+    about what text representation captures. SBERT encodes meaning
+    at the sentence level; LDA encodes thematic structure across
+    a corpus. Their hypotheses should reflect this difference, not
+    simply claim that both are better than TF-IDF. A reader who
+    finishes your Methods section should understand not only what
+    each method does but what each one uniquely reveals that the
+    other cannot. The opening sentence of your subsection should
+    connect to Member 1's TF-IDF section using \ref{} — something
+    that explains why SBERT and LDA are needed in addition to,
+    rather than instead of, the lexical baseline.
+
+  Results:
+    Interpretability is a genuine weakness of both SBERT and LDA
+    compared to TF-IDF, and you should say so directly. Trajectory
+    directions in embedding space do not map onto interpretable
+    vocabulary without additional probing; topic labels require
+    manual inspection and are not guaranteed to be stable. Naming
+    this limitation is a sign of analytical rigour, not a
+    concession.
+
+
+MEMBER 3
+
+  Introduction:
+    Make interpretability the first requirement. This sets up your
+    method — keyword shift — as directly satisfying a need that
+    Axis-1 methods cannot fully meet, which strengthens the
+    motivation for Axis 2 as a whole.
+
+  Methods:
+    Your hypothesis needs to say what keyword shift reveals that
+    the four Axis-1 methods cannot. The contrast should be
+    specific: it is not just that keyword shift is more
+    interpretable in general, but that it identifies which
+    particular vocabulary items are responsible for the shift —
+    something that trajectory distance measures cannot do by
+    design. Write the hypothesis with enough precision that
+    someone could look at your results and say clearly whether
+    you were right.
+
+  Results:
+    Naming specific terms that rose and fell is more compelling
+    than saying "vocabulary changed significantly." The reader
+    wants to see the evidence. When you compare your findings with
+    Member 4's cosine distance results, be specific about whether
+    the transition periods agree — if they do, it strengthens both
+    findings; if they do not, the discrepancy is worth explaining.
+    If Member 4 has not written yet, leave a comment and return
+    to this once they have.
+
+
+MEMBER 4
+
+  Introduction:
+    Your paragraph uses concrete examples to make the abstract
+    research question tangible. The examples should do more than
+    show that things changed — they should raise the question of
+    how systematic and how sudden the change was, because that is
+    precisely what your cosine distance method is designed to
+    measure. A closing sentence that makes this connection
+    explicit will tie your Introduction paragraph to your Methods
+    section in a way that feels purposeful rather than incidental.
+
+  Methods:
+    Cosine distance and keyword shift are the two Axis-2 methods.
+    The reader needs to understand why both are needed. Your
+    hypothesis should frame cosine distance as detecting something
+    that keyword shift misses — for instance, distributional
+    change that occurs even when the most frequent terms are
+    stable, or a more precise measure of the magnitude of shift
+    rather than just its vocabulary composition. The contrast with
+    keyword shift should be the sharpest part of your hypothesis.
+
+  Results:
+    Your method is particularly well-placed to answer when the
+    change happened, which is one of the two parts of the research
+    question (how and when). Make sure your Results section gives
+    a clear answer to the "when" question rather than only
+    describing the shape of the distance curve. Comparing your
+    transition peak with Member 3's keyword findings will be one
+    of the more interesting moments in the paper — whether they
+    agree or diverge both tell us something meaningful.
+
+
+MEMBER 5
+
+  Methods:
+    Open your subsection with a sentence that explicitly connects
+    PCA and UMAP to all four Axis-1 representations — they are
+    applied to everything, and the reader should understand this
+    scope immediately rather than inferring it. Your hypothesis
+    should distinguish between what PCA and UMAP each reveal,
+    not simply describe their technical properties. A useful
+    framing: PCA shows the global structure of change; UMAP shows
+    whether that global story conceals local variation.
+
+  Discussion:
+    This section synthesises what all five members found. It is
+    the only place in the report where someone looks across all
+    the Results sections and draws a single coherent conclusion.
+    To satisfy rubric points 4a, 4b, and 4c, structure the
+    Discussion around these three questions — you do not need
+    subheadings, but each question should have its own paragraph:
+
+    Consistency: across all seven methods, which findings agree
+    and which diverge? Where they agree, this is the most robust
+    claim in the paper. Where they diverge, the discrepancy is
+    itself a finding — what does it tell us about how method
+    choice shapes interpretation?
+
+    Interpretability: rank the methods honestly. TF-IDF and
+    keyword shift produce findings that trace back to specific
+    words. SBERT and UMAP produce findings that require additional
+    analysis to explain. This hierarchy should inform the
+    recommendations you make at the end of the Discussion.
+
+    Alignment with known NLP history: the breakpoint the data
+    identifies should be grounded in what we know happened — the
+    release of the Transformer architecture in 2017, the emergence
+    of BERT and GPT-style pre-training from 2018 onward. Cite
+    prior work that documents this \citep{pramanick_diachronic_2023,
+    hall_studying_2008}. If the data does not align with the
+    historical record, that is also worth discussing.
+
+    The evaluation table (H/M/L) should reflect what each member
+    wrote in their own Results section — read every member's
+    interpretability and consistency sentences before assigning
+    ratings, so the table does not contradict the prose.
+
+  Conclusions:
+    The opening sentence of the Conclusions should be the clearest,
+    most direct answer to the research question in the entire paper.
+    Everything before it has been building evidence; the Conclusions
+    is where you deliver the verdict. Do not open with a restatement
+    of the method or a summary of the approach — open with the
+    finding itself and let the rest of the section unpack it.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART D — SUBMISSION CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Consistency:
+  [ ] Both analytic axes are named in the Introduction (Member 1)
+  [ ] Every method has a hypothesis that names at least one other
+      method in explicit contrast (all members)
+  [ ] Every Results section addresses whether the hypothesis was
+      confirmed and includes observations on consistency,
+      interpretability, and alignment with known NLP history
+  [ ] All cross-references use \ref{} to section labels
+  [ ] All % link to Member N comments are resolved
+  [ ] Corpus statistics are identical across all sections
+
+Rubric coverage:
+  [ ] Discussion addresses consistency (4a), interpretability (4b),
+      and alignment with known NLP history (4c) in separate
+      paragraphs (Member 5)
+  [ ] Evaluation table with H/M/L ratings is present and consistent
+      with the prose (Member 5)
+  [ ] Conclusions opens with a direct answer to the research question
+      (Member 5)
+
+Format:
+  [ ] All \TODO{} markers deleted
+  [ ] \usepackage[review]{acl} changed to \usepackage{acl}
+  [ ] All figures readable without zooming at A4 size
+  [ ] PDF is at or under 10 pages
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
