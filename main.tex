@@ -74,7 +74,7 @@
 % ═══════════════════════════════════════════════════════════════════════════
 
 \documentclass[11pt]{article}
-\usepackage[review]{acl}      % sets 11pt font, 2.5cm margins automatically
+\usepackage{acl}      % sets 11pt font, 2.5cm margins automatically
 \usepackage{times}
 \usepackage{latexsym}
 \usepackage{microtype}
@@ -82,7 +82,16 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{xcolor}
-
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{2pt}
+\setlength{\tabcolsep}{4pt}
+\setlength{\abovedisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\belowdisplayskip}{4pt plus 1pt minus 1pt}
+\setlength{\abovedisplayshortskip}{2pt plus 1pt minus 1pt}
+\setlength{\belowdisplayshortskip}{2pt plus 1pt minus 1pt}
+\renewcommand{\arraystretch}{0.95}
 \graphicspath{{figures/}}
 \bibliographystyle{acl_natbib}
 
@@ -92,11 +101,9 @@
 
 % ═══════════════════════════════════════════════════════════════════════════
 \title{How Has NLP Research Changed? \\
-A Comparative Corpus Analysis of arXiv Abstracts, 1991--2021}
+A Comparative Corpus Analysis of Scientific Abstracts}
 
-\author{%
-  Member 1 \quad Member 2 \quad Member 3 \quad Member 4 \quad Member 5 \\
-  Text Analytics Coursework}
+\author{Rui Liu \quad Dekai Fan \quad Karen Coutinho \quad Guruanand Reddy Batapati \quad Chang Gao}
 
 \begin{document}
 \maketitle
@@ -107,8 +114,9 @@ A Comparative Corpus Analysis of arXiv Abstracts, 1991--2021}
 
 \begin{abstract}
 
-Scientific abstracts show how researchers framing problems and key findings. We study how this framing has changed in NLP by analysing 32,221 arXiv cs.CL abstracts spanning 1991 to 2021. Two analytical axes structure the project: Axis-1 compares four representation methods (TD-IDF unigrams, TF-IDF bigrams, SBERT embeddings, and LDA topic distributions), and Axis-2 compares two temporal comparison methods (keywords shift analysis and cosine distance between period centroids). Centroid trajectories are visualised through PCA and UMAP projections. All four Axis-1 methods agree on a single dominant breakpoint from 2011-2015 to 2016-2021 transition, which is consistent with the rise of transformer-based pre-training. The Axis-2 cosine distance results uncover a layered pattern beneath this consensus: lexical change peaks first, semantic change later, and topical change last. NLP's paradigm shift propagated upward through representational layers instead of occurring simultaneously. 
+Scientific abstracts show how researchers frame problems and key findings. This study analyzes how the framing of NLP research has changed based on a corpus of arXiv abstracts (1991-2021), comparing representation methods (TF-IDF, SBERT and LDA) and evaluating temporal shifts by keyword and semantic similarity measures. Centroid trajectories are visualised through PCA and UMAP projections. All four Axis 1 methods reflect a single dominant breakpoint at the 2011-2015 to 2016-2021 transition, which is consistent with the rise of transformer-based pre-training. The Axis 2 keyword shift confirms the same transition and cosine distance results uncover a layered pattern beneath this consensus: lexical change peaks first, semantic change later, and topical change last. NLP's paradigm shift propagated upward through representational layers instead of occurring simultaneously. 
 
+\noindent\textbf{Githublink:}\url{https://github.com/guruanand20/nlp-corpus-analysis.git}
 \end{abstract}
 
 
@@ -139,58 +147,46 @@ This project addresses the question of how the focus and vocabulary of NLP resea
 % Describe the corpus: source, size, time range, period binning,
 % and any notable characteristics (e.g. class imbalance).
 % Add a data exploration figure or table here if you wish.
-The source corpus was the public and available \texttt{gfissore/arxiv-abstracts-2021} dataset, which provides arXiv metadata and abstracts up to the end of 2021. From this larger collection, NLP-related articles were filtered using the arXiv subject labels \texttt{cs.CL} and \texttt{cmp-lg}. To support the comparison in different periods, the publication year was extracted on the basis of the arXiv identifier, and records without reliable year information were excluded. The filtered NLP corpus contains 32,221 abstracts covering 1994--2021.
+The source corpus was the publicly available \texttt{gfissore/arxiv-abstracts-2021} dataset, which contains arXiv metadata and abstracts up to the end of 2021. From this larger dataset, the arXiv subject labels \texttt{cs.CL} and \texttt{cmp-lg} were used to filter papers related to NLP. In order to get cleaner data, publication years were extracted from arXiv identifiers, and records without reliable year information were removed. The final NLP corpus contains 32,221 abstracts covering 1994-2021.
 
-For historical comparison, the filtered corpus was grouped into six period bins: 1991--1995, 1996--2000, 2001--2005, 2006--2010, 2011--2015, and 2016--2021. As shown in Table~\ref{tab:corpus-summary}, the first bin is labeled 1991--1995, but the earliest year of retained records in the filtered corpus is 1994. A distinguishable characteristic of the corpus is its strong temporal imbalance, as the number of abstracts in the 2016--2021 period is much higher than in all previous periods, representing approximately 88.16\% of the corpus. From Figure~\ref{fig:period-counts}, it is clear that the overwhelming majority of abstracts are concentrated in the 2016--2021 period, while the earlier bins are comparatively small.
+For historical comparison, the corpus was divided into six period bins: 1991-1995, 1996-2000, 2001-2005, 2006-2010, 2011-2015, and 2016-2021. Table~\ref{tab:corpus-summary} shows the number of abstracts and actual year range in each period. Although the first bin is labeled 1991-1995, the earliest records after cleaning begin in 1994. As shown in Figure~\ref{fig:period-counts}, ,the 2016-2021 period accounts for approximately 88.16\% of all abstracts, which shows the corpus is strongly imbalanced. Therefore, results involving this period should be interpreted carefully because it contains far more papers than earlier periods.
 
-\begin{table}[t]
+\begin{table}
 \centering
 \small
-\begin{tabular}{lrrrr}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrl p{3cm}}
 \hline
-Period & Count & Year min & Year max & Era \\
+Period & Count & Years & Era \\
 \hline
-1991--1995 & 448   & 1994 & 1995 & Statistical Methods \\
-1996--2000 & 659   & 1996 & 2000 & Statistical Methods \\
-2001--2005 & 279   & 2001 & 2005 & Machine Learning \\
-2006--2010 & 364   & 2006 & 2010 & Machine Learning \\
-2011--2015 & 2066  & 2011 & 2015 & Deep Learning \\
-2016--2021 & 28405 & 2016 & 2021 & Transformer \& Pre-training \\
+1991--1995 & 448 & 1994--1995 & Statistical \\
+1996--2000 & 659 & 1996--2000 & Statistical \\
+2001--2005 & 279 & 2001--2005 & Machine Learning \\
+2006--2010 & 364 & 2006--2010 & Machine Learning \\
+2011--2015 & 2066 & 2011--2015 & Deep Learning \\
+2016--2021 & 28405 & 2016--2021 & Transformer \\
 \hline
 \end{tabular}
-\caption{Statics of the filtered NLP corpus.}
+\caption{Statistics of the filtered NLP corpus.}
 \label{tab:corpus-summary}
 \end{table}
 
-\begin{figure}[t]
+\begin{figure}
 \centering
-\includegraphics[width=0.9\linewidth]{figures/period_counts.png}
+\includegraphics[width=0.85\linewidth]{figures/period_counts.png}
 \caption{Number of NLP abstracts per period.}
 \label{fig:period-counts}
 \end{figure}
+
+
+
+
 
 % ── Member 3: Requirements for a good solution ───────────────────────────
 % What properties must a method have to answer the research question well?
 % Use these requirements to motivate the two analytic axes.
 % ── Member 3: Requirements for a good solution ───────────────────────────
-A reliable method for tracking change in NLP research must meet 
-four requirements. First, it must be interpretable: the output 
-should point directly to specific words or phrases, not just 
-numerical scores that require further explanation. Second, it 
-must account for corpus imbalance: because the 2016--2021 period 
-contains far more abstracts than earlier periods, any comparison 
-must normalise for period size to avoid mistaking quantity for 
-significance. Third, it must capture both directions of change: 
-identifying not only which terms became prominent but also which 
-terms disappeared from the research vocabulary. Fourth, it must 
-be transparent enough for readers to verify the findings without 
-specialist tools. These four requirements motivate the two analytic 
-axes in this study. Axis 1 examines how the choice of text 
-representation of TF-IDF versus semantic embeddings shapes 
-what patterns become visible. Axis 2 examines how the choice of 
-comparison method, keyword shift analysis versus cosine 
-distance determines what kind of change can be detected 
-and explained.
+A reliable method for tracking change in NLP research must meet four requirements. First, it must be interpretable: the output should point directly to specific words or phrases, not just numerical scores that require further explanation. Second, it must account for corpus imbalance: because the 2016--2021 period contains far more abstracts than earlier periods, any comparison must normalise for period size to avoid mistaking quantity for significance. Third, it must capture both directions of change: identifying not only which terms became prominent but also which terms disappeared from the research vocabulary. Fourth, it must be transparent enough for readers to verify the findings without specialist tools. These four requirements motivate the two analytic axes in this study. Axis 1 examines how the choice of text representation of TF-IDF versus semantic embeddings shapes what patterns become visible. Axis 2 examines how the choice of comparison method, keyword shift analysis versus cosine distance determines what kind of change can be detected and explained.
 
 
 
@@ -207,7 +203,7 @@ The vocabulary difference when compared between early and recent NLP abstracts s
 
 On the other hand, a 2018 paper about Universal Language Model Fine-tuning (ULMFiT) talks about inductive transfer learning, pre-trained models, fine-tuning and state of the art performance on benchmark datasets. The research question is framed with respect to generalization across tasks and reduction in data requirements, which were absent in the 1994 abstract.
 
-Three differences can be noted from the above comparison. First, the interest of analysis transformed from grammatical structures to neural model parameters. Second, the evaluation criteria shifted from linguistic correctness to measurable accuracy. Third, the framing of contribution shifted from theoretical reformulation to practical transfer and generalization. The above differences shows the two analytic axes in this study of whether text representation methods and comparison methods can characterize this transformation systematically across all 32,221 abstracts.
+Three differences can be noted from the above comparison. First, the interest of analysis transformed from grammatical structures to neural model parameters. Second, the evaluation criteria shifted from linguistic correctness to measurable accuracy. Third, the framing of contribution shifted from theoretical reformulation to practical transfer and generalization.
 % ═══════════════════════════════════════════════════════════════════════════
 % 2. METHODS   Target: ~1,800 words total | ~360 words per member
 %    Rubric 3a: baseline + preprocessing + representations
@@ -221,23 +217,18 @@ Three differences can be noted from the above comparison. First, the interest of
 % Describe the preprocessing pipeline (NB00) and the TF-IDF baseline.
 % Include the TF-IDF equation. State vocabulary sizes.
 % Justify design choices. Add a figure if it clarifies the pipeline.
-\TODO{Member 1 — Preprocessing + TF-IDF baseline (~360w, Rubric 3a).
-Cover: pipeline overview, preprocessing steps (lowercasing, tokenisation,
-stopword removal, etc.), TF-IDF unigram baseline (include Eq.~1, vocabulary
-size, hyperparameters), TF-IDF bigram as first axis alternative.
-Justify each choice.}{360}
 
 \subsection{Data Preparation and Preprocessing}
 
 
-The dataset was filtered from 1999486 abstracts to retain papers categorised under \texttt{cs.CL} and \texttt{cmp-lg}, resulting in 32221 abstracts from 1994 to 2021, with the inclusion of \texttt{cmp-lg}, the predecessor of \texttt{cs.CL}. It ensures coverage of early NLP research and avoids discontinuities in the dataset. Publication years were extracted from both legacy and modern arXiv identifier formats, and documents were grouped into six five-year periods (1991-1995 to 2016-2021) to ensure comparability across time, with 2021 merged into the final bin due to limited sample size. Each period was further associated with a corresponding NLP technical paradigm for interpretation.
+The dataset was filtered from 1,999,486 abstracts to retain papers categorised under \texttt{cs.CL} and \texttt{cmp-lg}, resulting in 32,221 abstracts from 1994 to 2021, with the inclusion of \texttt{cmp-lg}, the predecessor of \texttt{cs.CL}. It ensures coverage of early NLP research and avoids discontinuities in the dataset. Publication years were extracted from both legacy and modern arXiv identifier formats, and documents were grouped into six five-year periods (1991-1995 to 2016-2021) to ensure comparability across time, with 2021 merged into the final bin due to limited sample size. Each period was further associated with a corresponding NLP technical paradigm (Era) for interpretation.
 
 
 Text preprocessing involved lowercasing, removal of non-alphabetic characters, stopword filtering, and lemmatisation to reduce noise and improve consistency across documents.
 
 \subsection{TF-IDF Representations}
 
-TF-IDF Unigram was adopted as a baseline representation due to its minimal assumptions and direct interpretability, enabling transparent comparison of lexical importance across periods. Representations were generated using \texttt{min\_df=5} and \texttt{max\_df=0.85} to remove noise and overly common terms, with \texttt{sublinear\_tf=True} to reduce the dominance of high-frequency tokens, resulting in a vocabulary of approximately 15000 terms. Given the substantial imbalance in document counts across periods, term importance was aggregated by the mean rather than the sum. We hypothesise that TF-IDF Unigram will capture broad lexical shifts between paradigms, for instance, the decline of statistical terminology and the rise of neural vocabulary. However, it tends to treat semantically related terms with different surface forms as unrelated, thereby limiting its ability to capture deeper connections in meaning.
+TF-IDF Unigram was adopted as a baseline representation due to its minimal assumptions and direct interpretability, enabling transparent comparison of lexical importance across periods. Representations were generated using \texttt{min\_df=5} and \texttt{max\_df=0.85} to remove noise and overly common terms, with \texttt{sublinear\_tf=True} to reduce the dominance of high-frequency tokens, resulting in a vocabulary of approximately 15,000 terms. Given the substantial imbalance in document counts across periods, term importance was aggregated by the mean rather than the sum. We hypothesise that TF-IDF Unigram will capture broad lexical shifts between paradigms, for instance, the decline of statistical terminology and the rise of neural vocabulary. However, it tends to treat semantically related terms with different surface forms as unrelated, thereby limiting its ability to capture deeper connections in meaning.
 
 
 
@@ -252,15 +243,18 @@ TF-IDF Bigram extends the baseline by capturing compound expressions such as lan
 
 \subsection{SBERT and LDA Representations}
 
-Based on the TF-IDF baseline, two additional non-lexical text representations were introduced to capture patterns that the lexical overlap alone may miss. While TF-IDF Unigram and TF-IDF Bigram represent abstracts through observable word and phrase frequency, SBERT and LDA, respectively, encode text from the two levels of sentence meaning and thematic structure. Therefore, they are used not as replacements for TF-IDF, but as complementary representations to testing whether the historical development of NLP appears different once the lexical form is separated from the deeper semantic or topical organization.
+Based on the TF-IDF baseline, SBERT and LDA captures patterns that lexical overlap may miss. TF-IDF represents abstracts through word and phrase frequency, while SBERT focuses on sentence meaning and LDA focuses on topic structure. These two methods provided another view of the same historical change.
 
-SBERT was implemented with the \texttt{all-MiniLM-L6-v2} Sentence-Transformers model, which maps each abstract to a d384-dimensional dense vector \citep{allminilm_modelcard}. With the complete cleaned data(32221), SBERT produced an embedding matrix of shape \texttt{(32221, 384)}. Sentence-BERT is based on siamese BERT networks trained to place semantically similar texts close together in vector space, making it suitable for semantic similarity and clustering tasks \citep{reimers2019sentence}. Unlike TF-IDF, SBERT can capture shifts in meaning even when related research is expressed through different lexical choices. Therefore, it is hypothesized that SBERT will reveal a long-range semantic drift that remains partially invisible to TF-IDF, especially in cases where terms change without completely disrupting the underlying research content.
+SBERT was implemented with the \texttt{all-MiniLM-L6-v2} Sentence-Transformers model, which maps each abstract into a dense vector with 384 dimensions \citep{allminilm_modelcard}. The model produced an embedding matrix of shape \texttt{(32221, 384)} with the full cleaned corpus. Additionally, Sentence-BERT places texts with similar meanings close together in vector space \citep{reimers2019sentence}. Compared with TF-IDF, SBERT can capture related ideas even when they are written with different words. The hypothesis is that SBERT will reveal semantic drift that is partly hidden from TF-IDF.
 
-LDA was used to model the thematic structure at the corpus level\citep{blei2003latent}. After token-based filtering, 32,217 abstracts remained for topic modeling and the resulting dictionary contained 12,860 terms. Each abstract was represented as a topic-proportion vector, where each dimension corresponds to the probability weight of a latent topic. Candidate values of $K=8$, $K=10$, and $K=15$ were compared using coherence, generating scores of 0.5101, 0.5082, and 0.5127, respectively; $K=15$ was selected as the final topic number. This higher value was preferred because it achieved the strongest coherence while still producing interpretable topics such as translation, embeddings, transformers, speech recognition, parsing, sentiment analysis, and knowledge graphs. The hypothesis is that LDA will reveal structural reorganization in research themes more clearly than TF-IDF, because it groups related vocabulary into shared latent topics instead of treating words independently.
+LDA was used to model topic structure at the corpus level \citep{blei2003latent}. After token filtering, 32,217 abstracts remained, with a dictionary of 12,860 terms. Each abstract was represented as a topic proportion vector, where each dimension gives the probability weight of one latent topic. The different $K$ values, including $K=8$, $K=10$, and $K=15$, were compared using coherence, with scores of 0.5101, 0.5082, and 0.5127. Since $K=15$ achieved the highest coherence and still produced interpretable topics, it was selected as the final setting. The hypothesis is that LDA will show changes in research themes more clearly than TF-IDF, because it groups related words into shared topics rather than treating each word separately.
 
 % ── Member 3: Keyword shift axis (Rubric 3b + 3c) ────────────────────────
 % Describe the keyword shift comparison method.
 % State a clear hypothesis about what it will reveal.
+
+\subsection{Keyword shift Representations}
+
 Keyword shift analysis tracks vocabulary change by identifying which terms are most prominent in each time period and comparing those lists across periods. For each of the six five-year bins, the mean TF-IDF score is computed across all abstracts in that period. The mean is used rather than the sum to account for the strong temporal imbalance in the corpus, ensuring scores remain comparable across periods of different sizes.
 
 The top-$N$ terms are extracted after filtering a custom stoplist of generic academic phrases, including paper, based, used, and present, which appear consistently across all periods without reflecting genuine research content. $N$ is set to 20. The analysis is run separately for unigrams and bigrams to capture both individual terms and compound concepts such as language model and neural network.
@@ -274,7 +268,7 @@ Emerging vocabulary is defined as terms present in the top-$N$ lists of both lat
 % Describe the cosine distance comparison method.
 % State a clear hypothesis about what it will reveal.
 
-\subsection{Axis 2B: Cosine Distance}
+\subsection{Cosine Distance}
 \label{sec:methods-axis2}
 
 Cosine distance analysis measures the magnitude of change between time periods by comparing their centroid vectors in the representation space. For each time period, a centroid is computed by taking the mean of all abstract vectors within that period:
@@ -293,20 +287,20 @@ Cosine distance is well suited to high-dimensional text vectors because it measu
 
 This method differs fundamentally from keyword shift analysis in what it can reveal. Keyword shift identifies which specific terms changed and in which direction - it produces a named list of rising and falling vocabulary items. Cosine distance instead measures how much the overall representation of a period changed relative to the previous one, without identifying the specific terms responsible. The two methods are therefore complementary: keyword shift provides interpretable evidence of what changed, while cosine distance provides a quantitative signal of when and how dramatically the change occurred.
 
-The analysis was applied to all four representations - TF-IDF unigram, TF-IDF bigram, SBERT and LDA - producing four independent distance timelines. Comparing these timelines tests whether different representation choices lead to different conclusions about the timing of NLP's major paradigm shifts. We hypothesize that TF-IDF based distances will detect the earliest breakpoint since vocabulary change is a surface level signal that precedes deeper conceptual shifts. SBERT distances are expected to detect a later breakpoint, reflecting when the semantic meaning of research fundamentally changed rather than just its terminology. LDA distances are expected to show the most gradual change overall, since broad research topics shift more slowly than individual words or semantic representations. If this cascade pattern holds across all four representations it would suggest that NLP's paradigm shift was a gradual process rather than a sudden revolution - surface vocabulary changed first, followed by semantic meaning, followed by a full reorganization of research topics.
+The analysis was applied to all four representations - TF-IDF unigram, TF-IDF bigram, SBERT and LDA - producing four independent distance timelines. Comparing these timelines tests whether different representation choices lead to different conclusions about the timing of NLP's major paradigm shifts. We hypothesize that TF-IDF based distances will detect the earliest breakpoint since vocabulary change is a surface level signal that precedes deeper conceptual shifts. SBERT distances are expected to detect a later breakpoint, reflecting when the semantic meaning of research fundamentally changed rather than just its terminology. LDA distances are expected to show the most gradual change overall, since broad research topics shift more slowly than individual words or semantic representations. 
 
 % ── Member 5: Dimensionality reduction design (Rubric 3a + 3c) ───────────
 % Describe PCA and UMAP as visualisation methods.
 % Justify the two-stage SVD→PCA pipeline for TF-IDF.
 % State a hypothesis comparing PCA and UMAP.
-\subsection{Dimensionality Reduction: PCA and UMAP}
+\subsection{PCA and UMAP Visualization}
 \label{sec:methods-dr}
 
-In order to visually and quantitatively compare the four Axis-1 representations in Section~\ref{sec:methods} and Section~\ref{sec:methods-axis2}, each representation method must be projected on a two-dimensional plane. The right strategy depends on the structure of the source matrix. 
+In order to visually and quantitatively compare the four Axis 1 representations in Section~\ref{sec:methods} and Section~\ref{sec:methods-axis2}, each representation method must be projected on a two-dimensional plane. The right strategy depends on the structure of the source matrix. 
 
 %\paragraph{The two-step TF-IDF processing flow.}
 
-If PCA is performed on the TF-IDF matrix, the entire sparse matrix must be transformed into a dense table. However, due to memory limitations, this is not possible for the size of our data set. Therefore, we adopted a two-step approach that follows the latent semantic analysis (LSA) framework proposed by \citet{deerwester1990indexing}.The first step is to directly manipulate the sparse format with \texttt{TruncatedSVD}, reducing the dimensionality of each matrix to 50 dense dimensions. The cumulative variance grows smoothly as a function of ~$k$: When $k{=}50$, the cumulative explained variance of the unigrams reaches 11.6\%, while the cumulative explained variance of the bigrams reaches 4.5\%. For high-dimensional sparse text data, the information is widely distributed in thousands of lexical dimensions \citep{deerwester1990indexing}, so that no turning point is expected. According to the standard practice of LSA, we set $k{=}50$. In the second step, PCA reduces the dimensional output 50 to two dimensions. For unigrams, the effective variance retained is  PC1\,=\,0.64\% and PC2\,=\,0.56\%, while for bigrams they are PC1\,=\,0.22\%, PC2\,=\,0.21\%, both expressed as a percentage of the initial total variance.
+If PCA is performed on the TF-IDF matrix, the entire sparse matrix must be transformed into a dense table. However, due to memory limitations, this is not possible for the size of our data set. Therefore, we adopted a two-step approach that follows the latent semantic analysis (LSA) framework proposed by \citet{deerwester1990indexing}.The first step is to directly manipulate the sparse format with \texttt{TruncatedSVD}, reducing the dimensionality of each matrix to 50 dense dimensions. The cumulative variance grows smoothly as a function of~$k$: When $k{=}50$, the cumulative explained variance of the unigrams reaches 11.6\%, while the cumulative explained variance of the bigrams reaches 4.5\%. For high-dimensional sparse text data, the information is widely distributed in thousands of lexical dimensions \citep{deerwester1990indexing}, so that no turning point is expected. According to the standard practice of LSA, we set $k{=}50$. In the second step, PCA reduces the dimensional output 50 to two dimensions. For unigrams, the effective variance retained is  PC1\,=\,0.64\% and PC2\,=\,0.56\%, while for bigrams they are PC1\,=\,0.22\%, PC2\,=\,0.21\%, both expressed as a percentage of the initial total variance.
 
 %\paragraph{Direct PCA for dense matrices.}
 
@@ -314,7 +308,7 @@ Due to the high density of SBERT embeddings (384 dimensions) and LDA topic distr
 
 %\paragraph{UMAP as an alternative nonlinear method.}
 
-To access whether the linear projection of PCA distorts the time structure, we also applied UMAP \citep{mcinnes2018umap-software}, a non-linear manifold method that preserves the local neighborhood topology. For the TF-IDF matrix, the treatment is SVD (50)\,$\to$\,L2-normalise\,$\to$\,UMAP (cosine); for SBERT we applied UMAP (cosine) directly; for LDA we use UMAP(euclidean) to match the simple geometric structure of the proportions of the subject. We always set \texttt{n\_neighbors}\,=\,30 and \texttt{min\_dist}\,=\,0.3. And set \texttt{random\_state}\,=\,42 to ensure repeatability. Our hypothesis is that PCA will reveal clearer and more directly comparable trends among the four representations of Axis-1, while UMAP will highlight the local subdomain structure ignored by linear projection.
+To assess whether the linear projection of PCA distorts the time structure, we also applied UMAP \citep{mcinnes2018umap-software}, a non-linear manifold method that preserves the local neighborhood topology. For the TF-IDF matrix, the treatment is SVD (50)\,$\to$\,L2-normalise\,$\to$\,UMAP (cosine); for SBERT we applied UMAP (cosine) directly; for LDA we use UMAP(euclidean) to match the simple geometric structure of the proportions of the subject. We always set \texttt{n\_neighbors}\,=\,30 and \texttt{min\_dist}\,=\,0.3. And set \texttt{random\_state}\,=\,42 to ensure repeatability. Our hypothesis is that PCA will reveal clearer and more directly comparable trends among the four representations of Axis 1, while UMAP will highlight the local subdomain structure ignored by linear projection.
 
 % ═══════════════════════════════════════════════════════════════════════════
 % 3. EXPERIMENTAL EVALUATION   Target: ~1,500 words total | ~300w per member
@@ -331,69 +325,63 @@ To access whether the linear projection of PCA distorts the time structure, we a
 % Report and interpret the TF-IDF trajectory results.
 % Include figures and/or tables you think best present these findings.
 % Analyse errors or patterns where TF-IDF produces unexpected results.
-\TODO{Member 1 — Axis 1 TF-IDF results (~300w, Rubric 4a--4d).
-State the metric(s) you use and their limitations for TF-IDF trajectories.
-Describe how hyperparameters were set.
-Present your main TF-IDF findings (add a figure or table if helpful).
-Identify patterns where TF-IDF produces misleading or surprising results.}{300}
+
 \subsection{TF-IDF Analysis}
 
-TF-IDF scores are used as the primary metric to track vocabulary trajectories across time, where term importance is measured by relative frequency weighted by inverse document frequency. To account for the imbalance in document counts across periods, term importance is aggregated using the mean rather than the sum. The representations are constructed using \texttt{min\_df=5}, \texttt{max\_df=0.85}, \texttt{max\_features=20000} and \texttt{sublinear\_tf=True}, which reduce noise from rare and overly frequent terms while limiting the dominance of high-frequency tokens. However, this metric treats each term independently, limiting its ability to capture semantic equivalence across different surface forms.
+TF-IDF scores are used as the primary metric to track vocabulary trajectories across time, where term importance reflects relative frequency weighted by inverse document frequency. To ensure comparability across periods with highly imbalanced document counts, term importance is aggregated using the mean rather than the sum. However, this metric treats each term independently, limiting its ability to capture semantic equivalence across different surface forms.
 
 There is a clear shift in NLP research vocabulary over time. Terms associated with statistical approaches dominate earlier periods but decline sharply after 2010, while neural-related terms such as neural, attention and pretrained show a sharp increase in frequency after 2011. The term transformer appears only in the most recent period, marking a distinct transition in research focus.
 
 Bigram representations provide additional resolution. While machine translation remains consistently important across all periods, language model becomes dominant in the final stage, reflecting the increasing prominence of large pre-trained models. Compound terms such as pre-trained model and attention mechanism are only captured at this level, highlighting the limitations of unigram representations. Analysis of top-ranked terms across periods further shows the emergence of neural terminology alongside the decline of earlier statistical vocabulary.
 
-These findings confirm both hypotheses: TF-IDF Unigram captures the broad paradigm shift, while Bigram reveals compound terms such as language model and attention mechanism that are not visible at the unigram level. And the results indicate a major transition between 2011–2015 and 2016–2021, with 2006–2010 acting as a transitional phase. The observed trends also align with established developments in NLP, including the rise of neural approaches and transformer-based models \citep{vaswani_attention_2023, devlin_bert_2019}.
+These findings confirm both hypotheses: TF-IDF Unigram captures the broad paradigm shift, while Bigram reveals compound terms such as language model and attention mechanism that are not visible at the unigram level. This pattern is consistent with the keyword shift analysis (Section~\ref{sec:keyword-results}), which later identifies similar neural vocabulary emerging from 2011-2015 onwards. And the results indicate a major transition between 2011–2015 and 2016–2021, with 2006–2010 acting as a transitional phase. The observed trends also align with established developments in NLP, including the rise of neural approaches and transformer-based models \citep{vaswani_attention_2023, devlin_bert_2019}.
 
-However, TF-IDF can produce misleading signals in certain cases. For instance, semantically equivalent terms such as \textit{language model} and \textit{language modeling} are treated as separate features, which may fragment the representation of key concepts and underestimate their true importance. Further, earlier periods with smaller sample sizes are more sensitive to outliers, which can distort term importance rankings.
+TF-IDF also exhibits limitations that can affect interpretation. For instance, semantically equivalent terms such as \textit{language model} and \textit{language modeling} are treated as separate features, which may fragment the representation of key concepts and underestimate their true importance. Further, earlier periods with smaller sample sizes are more sensitive to outliers, which can distort term importance rankings.
 
 
 % ── Member 2: Axis 1 SBERT + LDA results (Rubric 4a + 4b + 4c + 4d) ─────
 % Report and interpret the SBERT and LDA trajectory results.
 % Include figures and/or tables you think best present these findings.
 % Analyse where these methods succeed or fail compared to TF-IDF.
-\TODO{Member 2 — Axis 1 SBERT + LDA results (~300w, Rubric 4a--4d).
-State the metric(s) you use and their limitations for dense representations.
-Describe how K (LDA) and the SBERT model were chosen.
-Present your main SBERT and LDA findings (add a figure or table if helpful).
-Where do these methods agree with or diverge from TF-IDF, and why?}{300}
 
 \label{sec:results-sbert}
 
 \subsection{SBERT and LDA Analysis}
 
-SBERT and LDA were used as complementary representation methods for TF-IDF baseline. For SBERT, it mainly used cosine similarity and cosine distance between period centroids to measure the overall semantic distance between periods. As shown in Figure~\ref{fig:sbert_distance}, adjacent periods remain highly similar, while more distant periods become increasingly sparated. For example, the distance between 1991-1995 and 1996-2000 is only 0.015, whereas the distance between 1991-1995 and 2016-2021 rises to 0.259. This supports the hypothesis that SBERT captures gradual long-term semantic drift rather than a sudden break between. The relatively low distance between 2011-2015 and 2016-2021 also suggests that the period oriented towards transformation did not completely replace the early deep learning period, but rather developed from the semantic patterns that already existed before 2016.
+SBERT and LDA were evaluated as complements to the TF-IDF baseline. For SBERT, cosine distance between period centroids was used to measure semantic drift. As shown in Figure~\ref{fig:sbert_distance}, nearby periods have smaller distances, while distant periods are more separated. The distance between 1991-1995 and 1996-2000 is only 0.015, but it rises to 0.259 between 1991-1995 and 2016-2021. This supports the hypothesis that SBERT captures gradual semantic drift rather than one sudden break. The relatively low distance between 2011-2015 and 2016-2021 also suggests that the final period continued some semantic patterns that were already present before 2016.
 
-\begin{figure}[t]
+\begin{figure}
 \centering
-\includegraphics[width=0.9\linewidth]{figures/sbert_distance.png}
+\includegraphics[width=0.85\linewidth]{figures/sbert_distance.png}
 \caption{SBERT semantic distance across time periods.}
 \label{fig:sbert_distance}
 \end{figure}
 
-In terms of LDA, mean topic proportions were used to compare thematic structure across periods. As described in the Methods section, $K=15$ was selected using coherence, and each period was represented by the average distribution of its vectors according to the topic. The results also support the hypothesis that LDA reveals structural reorganizations in research themes more clearly than TF-IDF. While TF-IDF identifies individual words that rise or decline, LDA groups related vocabulary into shared latent topics, making it easier to observe broader shifts in the focus of research. As shown in Figure~\ref{fig:lda_topic_trends}, Topic 8, associated with parsing, grammar, and syntactic structure, declines over time. In contrast, Topic 6, associated with neural architectures, attention, and transformers, increases strongly in later periods, showing that the research towards model is increasingly important. Topic 11, related to sentiment, social media, and bias detection, also becomes more visible after 2006-2010, while Topic 1, related to machine translation and multilingual NLP, remains comparatively stable, suggesting that some classic NLP tasks continued across periods.
 
-Overall, SBERT and LDA support the TF-IDF finding that NLP shifted away from vocabulary relating grammar towards neural and model-related research. However, they add different evidence: SBERT shows smooth semantic drift, and LDA shows thematic reorganization behind the vocabulary shift. Additionally, their main limitation is explainability, because SBERT measures how much periods differ semantically, but not which terms caused the difference, while LDA topics need to be manually labeled from their top words.
+In terms of LDA, mean topic proportions were used to follow changes in thematic structure. The results show broader theme changes than the TF-IDF word trends, because related vocabulary is grouped into shared topics. As shown in Figure~\ref{fig:lda_topic_trends}, Topic 8, related to parsing, grammar, and syntax, declines over time. In contrast, Topic 6, related to neural architectures, attention, and transformers, rises strongly in later periods. Topic 11, related to sentiment, social media, and bias detection, also becomes more visible after 2006-2010, while Topic 1, machine translation and multilingual NLP, remains relatively stable.
 
-\begin{figure}[t]
+\begin{figure}
 \centering
-\includegraphics[width=0.9\linewidth]{figures/lda_topic_trends.png}
+\includegraphics[width=0.85\linewidth]{figures/lda_topic_trends.png}
 \caption{Major LDA topic trends across time periods.}
 \label{fig:lda_topic_trends}
 \end{figure}
 
+Overall, these findings are consistent with the TF-IDF result that NLP moved away from grammar and syntax vocabulary and towards neural models and transformer research. SBERT adds evidence of gradual semantic drift, while LDA shows that vocabulary change reflects broader changes in research themes. The main limitation is interpretability: SBERT shows how much periods differ, but does not indicate which terms caused the difference, and LDA topic labels require manual judgement.
+
+
+
 % ── Member 5 supplement ──
 
-\subsection{Axis 1: Trajectory Visualisation}
+\subsection{PCA and UMAP Trajectories}
 \label{sec:results-traj}
 
-Figure~\ref{fig:pca-all} shows the centroid trajectories of the PCA for the four representations. The most significant characteristic is their convergence: regardless of whether the study is represented as vocabulary frequency, sentence embedding, or subject distribution, the maximum centroid shift occurs at the same transition point (Table~\ref{tab:traj-stats}). Stage from 2011-2015 to 2016-2021 dominated the total trajectory length in every panel, which is consistent with the emergence of pre-trained language models based on transformers after 2017\citep{pramanick_diachronic_2023}. This confirms the PCA hypothesis that a clear and consistent overall trajectory can be observed in all four representations.
+Figure~\ref{fig:pca-all} shows the centroid trajectories of the PCA for the four representations. The most significant characteristic is their convergence: regardless of whether the study is represented as vocabulary frequency, sentence embedding, or subject distribution, the maximum centroid shift occurs at the same transition point (Table~\ref{tab:traj-stats}). The 2011-2015 to 2016-2021 step dominates total trajectory length in every panel, which is consistent with the emergence of pre-trained language models based on transformers after 2017\citep{pramanick_diachronic_2023}. This confirms the PCA hypothesis that a clear and consistent overall trajectory can be observed in all four representations.
 
 \begin{figure*}[t]
  \includegraphics[width=\linewidth]{figures/pca_trajectory_all_methods_v3.png}
   \caption{PCA centroid trajectories (1991-2021) for all four
-    Axis-1 representations. 
+    Axis 1 representations. 
     Arrows connect consecutive 5-year period centroids.
     Zoomed insets reveal the 1991-2010 cluster, which is otherwise
     compressed by the scale of the 2016-2021 centroid
@@ -419,53 +407,52 @@ Figure~\ref{fig:pca-all} shows the centroid trajectories of the PCA for the four
   \label{tab:traj-stats}
 \end{table}
 
-There are significant differences in displacement amplitudes between different methods. SBERT displayed the largest total trajectory (0.454) and single step (0.197), consistent with the results of Section~\ref{sec:results-sbert} that semantic embeddings capture a broader and more gradual drift than lexical methods.The total path of TF-IDF Bigram is much shorter (0.034 versus 0.133 for Unigrams), indicating that composite NLP terms are more stable than individual terms: sentences like \emph{language model} consolidate more quickly in the vocabulary than individual tokens containing relative frequency changes. The trajectory output of PCA is directly comparable across four panels because they share a common Euclidean scale. Compared to UMAP, this cross-method interpretability is a significant advantage, since the magnitude of the distance across the panels in UMAP is not linearly meaningful.
+The displacement magnitudes differ meaningfully. SBERT shows the largest total trajectory (0.454) and single step (0.197), consistent with the results of Section~\ref{sec:results-sbert} that semantic embeddings capture a broader and more gradual drift than lexical methods. TF-IDF Bigram's much shorter total path (0.034 versus 0.133 for Unigrams), suggests that composite NLP terms are more stable than individual terms. PCA outputs are interpretable across four panels because they share a common Euclidean scale. Compared to UMAP, this cross-method interpretability is a significant advantage, since the magnitude of the distance across the panels in UMAP is not linearly meaningful.
 
 \begin{figure*}[t]
  \includegraphics[width=\linewidth]{figures/umap_trajectory_all_methods_v3.png}
-  \caption{UMAP centroid trajectories for all four Axis-1 representations.}
+  \caption{UMAP centroid trajectories for all four Axis 1 representations.}
   \label{fig:umap}
 \end{figure*}
 
 The UMAP projections corroborate the PCA consensus only partially: TF-IDF bigram and LDA agree with PCA on the 2011-2015 to 2016-2021 breakpoint, but TF-IDF unigram and SBERT under UMAP both peak one period earlier (2006--2010 to 2011-2015), indicating that distributional change registered earlier in lexical and semantic space than in the linear projection.
 
-Across the four panels of Figure~\ref{fig:pca-all}, the three pre-transformer periods (1991-2010) cluster tightly while 2016-2021 sharply displaces to one side, which especially shows a clear plateau-then-jump structure in TF-IDF projections. Under SBERT and LDA, by contrast, the early periods trace a curved path: the early periods trace a curved arc that turns downward and rightward through 2011-2015 toward 2016-2021 under SBERT; under LDA the early-period path is similarly non-monotonic. This non-linearity, absent from TF-IDF, indicates that semantic and topical space was already reorganising during the machine-learning era (2001--2010) even as surface vocabulary remained stable, consistent with the staggered cosine
+Across the four panels of Figure~\ref{fig:pca-all}, the three pre-transformer periods (1991-2010) cluster tightly while 2016-2021 sharply displaces to one side, which especially shows a clear plateau-then-jump structure in TF-IDF projections. Under SBERT and LDA, by contrast, the early periods trace a curved path: the early periods trace a curved arc that turns downward and rightward through 2011-2015 toward 2016-2021 under SBERT; under LDA the early-period path is similarly non-monotonic. This non-linearity, absent from TF-IDF, indicates that semantic and topical space was already reorganising during the machine-learning era (2001-2010) even as surface vocabulary remained stable, consistent with the staggered cosine
 distance peaks in Section~\ref{sec:results-axis2}.
 
 % ── Member 3: Axis 2A keyword shift results (Rubric 4a + 4b + 4c + 4d) ──
 % Report and interpret the keyword shift results.
 % Include figures and/or tables you think best present these findings.
 % Analyse errors: where does keyword shift produce misleading results?
-Mean TF-IDF scores were used as the primary metric, with $N = 20$ terms per period for both unigrams and bigrams. Mean normalisation was applied to account for corpus size imbalance. The early group consisted of 1991--1995, 1996--2000, and 2001--2005; the late group consisted of 2011--2015 and 2016--2021.
+\subsection{Keyword Shift Analysis}
 
-The results confirmed the hypothesis. Unigram analysis identified 14 emerging terms in the late periods, including \textit{neural}, \textit{learning}, \textit{models}, \textit{training}, and \textit{tasks}, none of which appeared in the top-20 lists of any early period. Against this, 20 terms disappeared, including \textit{grammar}, \textit{parsing}, \textit{unification}, \textit{syntactic}, and \textit{statistical}. Bigram analysis reinforced this pattern: \textit{deep learning}, \textit{pre trained}, \textit{language model}, and \textit{word embeddings} emerged in the late periods, while \textit{finite state}, \textit{tree adjoining}, and \textit{hidden markov} disappeared entirely. These findings are consistent with the TF-IDF results, which identify the same transition point, and align with documented developments in NLP history, including the Transformer architecture in 2017 and BERT in 2018 \citep{vaswani_attention_2023, devlin_bert_2019}.
+Keyword shift analysis identifies vocabulary change at a more granular level than TF-IDF by naming the specific terms that entered and left the top-ranked lists across periods, rather than describing the general direction of change. Mean TF-IDF scores were used as the primary metric, with $N = 20$ terms per period for both unigrams and bigrams. Mean normalisation was applied to account for corpus size imbalance. The early group consisted of 1991--1995, 1996--2000, and 2001--2005; the late group consisted of 2011--2015 and 2016--2021.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/Unigram_Keyword_Trends.png}
+\caption{Normalised TF-IDF scores for selected 
+unigram terms across periods.}
+\label{fig:keyword_trends}
+\end{figure}
 
-\begin{figure*}[t]
-\cnetering
-\includegraphics[width=\linewidth]
-{figures/Unigram_Keyword_Trends.png}
-\caption{Normalised TF-IDF scores for selected unigram terms across periods, showing the rise of neural vocabulary and decline of statistical and grammar-based terms.}
-\label{fig:unigram_trends}
-\end{figure*}
+The results confirmed the hypothesis. Among unigrams, the specific terms that emerged in the late periods included \textit{neural}, \textit{learning}, \textit{models}, \textit{training}, and \textit{tasks}, none of which featured in the top-20 lists of any early period. The specific terms that disappeared included \textit{grammar}, \textit{parsing}, \textit{unification}, \textit{syntactic}, and \textit{statistical}. At the bigram level, the phrase-level terms that newly entered the top-ranked lists included \textit{deep learning}, \textit{pre trained}, \textit{language model}, and \textit{word embeddings}, while \textit{finite state}, \textit{tree adjoining}, and \textit{hidden markov} were absent from all late-period lists entirely. These specific vocabulary replacements align with documented developments in NLP history, including the Transformer architecture in 2017 and BERT in 2018 \citep{vaswani_attention_2023, devlin_bert_2019}.
 
-
-Keyword shift analysis offers high interpretability, as each finding traces directly to named vocabulary items. This contrasts with cosine distance, which quantifies the magnitude of change but cannot identify which terms drove it.
+Keyword shift analysis offers high interpretability, as each finding traces directly to named vocabulary items. This contrasts with cosine distance, which quantifies the magnitude of change but cannot identify which specific terms drove it.
 
 Two limitations apply. First, the method cannot distinguish genuine research shifts from changes in writing convention. Second, despite mean normalisation, the larger size of the 2016--2021 period may still cause its vocabulary to over-represent specialised subfields rather than field-wide trends. Despite these limitations, the results consistently indicate a major vocabulary shift beginning in the early 2010s, with 2006--2010 acting as a transitional phase.
-
 
 % ── Member 4: Axis 2B cosine distance results (Rubric 4a + 4b + 4c + 4d) ─
 % Report and interpret the cosine distance results.
 % Include figures and/or tables you think best present these findings.
 % Analyse errors: where does cosine distance produce misleading results?
 
-\subsection{Axis 2B: Cosine Distance Analysis}
+\subsection{Cosine Distance Analysis}
 \label{sec:results-axis2}
 
 The primary measure used in this analysis is cosine distance, it is defined as $1 - \cos(\theta)$ where $\theta$ is the angle between the two centroid vectors. A cosine distance value of 0 implies identical period representations, whereas a value of 1 indicates maximum divergence. This is best suited for high dimensional text vectors as it isn't  dependent on vector magnitude, meaning differences in abstract count across periods do not artificially inflate the measured change. However, centroid averaging compresses the full distribution of abstracts within a period into a single representative vector, potentially masking internal heterogeneity within a period.
 
-Cosine Distance was computed on four representations: TF-IDF unigram, TF-IDF bigram, SBERT embeddings and LDA topic distributions, all developed from the full 32,217 abstract corpus. For each representation, one centroid vector was computed per period by taking the mean of all abstract vectors within that period. Distances were then calculated between every pair of adjacent periods, resulting in five transition scores across 1991 - 2021, All four representations were verified to share identical indices prior to analysis, confirming no alignment issues between the matrices.
+Cosine Distance was computed on four representations: TF-IDF unigram, TF-IDF bigram, SBERT embeddings and LDA topic distributions, all developed from the 32,217 abstract corpus after LDA token filtering. For each representation, one centroid vector was computed per period by taking the mean of all abstract vectors within that period. Distances were then calculated between every pair of adjacent periods, resulting in five transition scores across 1991 - 2021, All four representations were verified to share identical indices prior to analysis, confirming no alignment issues between the matrices.
 
 \begin{table}[h!]
     \centering\small
@@ -484,7 +471,7 @@ Cosine Distance was computed on four representations: TF-IDF unigram, TF-IDF big
     \label{tab:cosine-distances}
 \end{table}
 
-The above table, table~\ref{tab:cosine-distances} reports the cosine distances for all period transitions across all four representations. TF-IDF unigram distances range from ~0.075 to 0.13, bigram distances range from ~0.25 to 0.55 and SBERT distance range from ~0.015 to 0.072. TF-IDF unigram and bigram both identify the 2001-2005 to 2006-2010 transition as the largest shift, while SBERT identifies 2006-2010 to 2011-2015 as the biggest semantic change, one period later. LDA identifies 2011-2015 to 2016-2021 as the biggest topic-level shift, Highlighted in bold in the above table.
+The above table, table~\ref{tab:cosine-distances} reports the cosine distances for all period transitions across all four representations. The largest shift detected by each method is highlighted in bold in Table~\ref{tab:cosine-distances}.
 
 \begin{figure}[h!]
     \centering
@@ -508,17 +495,17 @@ Three limitations affect the reliability of these results. Firstly the corpus is
 \label{sec:eval-disc}
 
 %\paragraph{Consistency across methods.}
-The most robust finding of this study is the unanimous agreement on timing. All four Axis-1 representations identify the 2011-2015 to 2016-2021 transition as the dominant breakpoint under PCA (Table~\ref{tab:traj-stats}), and the keyword shift analysis in Section~\ref{sec:results-axis2} confirms the same period as the point at which neural and transformer vocabulary fully displaced statistical terminology.
+The most robust finding of this study is the unanimous agreement on timing. All four Axis 1 representations identify the 2011-2015 to 2016-2021 transition as the dominant breakpoint under PCA (Table~\ref{tab:traj-stats}), and the keyword shift analysis in Section~\ref{sec:results-axis2} confirms the same period as the point at which neural and transformer vocabulary fully displaced statistical terminology.
 
-Directional analysis identified a cluster of three. TF-IDF unigram (-31.9°), LDA at (-5.7°) and TF-IDF bigram (19.4°) are closely clustered together, while SBERT is located at 42.9° sitting apart from this cluster with WEAK agreement with unigram (74.8°). This pattern reflects a representational divide. TF-IDF and LDA both operate on vocabulary-level structure while SBERT's sentence-level embeddings capture a different dominant variance axis. Despite this directional divergence, the breakpoint consensus in Table~\ref{tab:traj-stats} stands as the primary, more robust finding.
+Directional analysis reveals a representational divide. TF-IDF unigram (-31.9°), LDA at (-5.7°) and TF-IDF bigram (19.4°) cluster within 51.4°, while SBERT at 42.9° shows only WEAK agreement with unigram (74.8°). TF-IDF and LDA both operate on vocabulary-level structure while SBERT's capture a different dominant variance axis. The breakpoint consensus in Table~\ref{tab:traj-stats} nonetheless stands as the primary, more robust finding.
 
-Axis-2 cosine distance results showed extra temporal details. TF-IDF cosine distance reaches its peak at 2001-2005 to 2006-2010, SBERT peaks at 2006-2010 to 2011-2015, and LDA peaks at 2011-2015 to 2016-2021. It suggests that NLP's paragigm shift spreads upward through representational layers. Vocabulary first, semantic meaning second, thematic structure last. The NLP's semantic and topical space was already reorganising during 2001-2010, even as its lexical space remained stable.
+Axis 2 cosine distance results showed extra temporal details. TF-IDF cosine distance reaches its peak at 2001-2005 to 2006-2010, SBERT peaks at 2006-2010 to 2011-2015, and LDA peaks at 2011-2015 to 2016-2021. It suggests that NLP's paradigm shift spreads upward through representational layers. Vocabulary first, semantic meaning second, thematic structure last. The NLP's semantic and topical space was already reorganising during 2001-2010, even as its lexical space remained stable.
 
 %\paragraph{Interpretability.}
-In terms of outputs communication, these methods are very different. Keyword shift analysis and TF-IDF produce specific lists of words that any reader can verify. Cosine distance quantifies magnitude but not source. LDA requires manual inspection of topic-word distributions. SBERT trajectories require probing experiments. Within the same method, we can at least compare PCA centroid positions across panels and use UMAP to qualify structural observation. For non-specialist communication, TF-IDF and keyword shift provide the best balance.SBERT is preferred to catch hidden semantic changes where vocabulary is stable. 
+The methods differ in how directly their output can be communicated. Keyword shift analysis and TF-IDF produce named vocabulary lists any reader can verify. Cosine distance quantifies magnitude but not source. LDA requires manual topic-word inspection. SBERT trajectories require probing experiments. Within the same method, we can at least compare PCA centroid positions across panels and use UMAP to qualify structural observation. For non-specialist communication, TF-IDF and keyword shift provide the best balance. SBERT is preferred to catch hidden semantic changes where vocabulary is stable. 
 
 %\paragraph{Alignment with known NLP history.}
-The 2011-2015 to 2016-2021 breakpoint matches the appearance of Transformer architecture (2017) and BERT and GPT-style pre-training (2018) \citep{pramanick_diachronic_2023, hall_studying_2008}. The earlier TF-IDF cosine peaks at 2011-2005 to 2006-2010 also map to the displacement of rule-based methods by SVMs and CRFs. \citep{hall_studying_2008}.
+The 2011-2015 to 2016-2021 breakpoint matches the appearance of Transformer architecture (2017) and BERT and GPT-style pre-training (2018) \citep{pramanick_diachronic_2023, hall_studying_2008}. The earlier TF-IDF cosine peaks at 2001-2005 to 2006-2010 also map to the displacement of rule-based methods by SVMs and CRFs. \citep{hall_studying_2008}. Taken together, these three perspectives support a single integrated reading. NLP undergo a layered reorganization that began earlier and consolidated at that boundary. 
 
 \begin{table}[t]
   \centering\small
@@ -538,8 +525,7 @@ The 2011-2015 to 2016-2021 breakpoint matches the appearance of Transformer arch
     \hline
   \end{tabular}
   \caption{Method evaluation on three criteria (H\,=\,High,
-    M\,=\,Medium, L\,=\,Low). Consistency (Cons.) reflects breakpoint agreement; interpretability (Interp.) reflects
-    whether output identifies the source of change; alignment (Align.) reflects historical correspondence with documented NLP paradigm changes.}
+    M\,=\,Medium, L\,=\,Low, Cons.\,=\,Consistency, Interp\,=\,interpretability, Align\,=\,alignment)}
   \label{tab:eval}
 \end{table}
 
@@ -559,13 +545,9 @@ The 2011-2015 to 2016-2021 breakpoint matches the appearance of Transformer arch
 
 % ── Member 5: opening synthesis (first paragraph) ─────────────────────────
 
-The biggest shift supported by all four Axis-1 representation methods in NLP research occurred at the 2011-2015 to 2016-2021. Beneath this consensus, the Axis-2 cosine distance results show a layered pattern. TF-IDF peaks first, SBERT peaks one period later, and LDA is the last. Therefore, the shape of NLP's transformation depends on the metric. Cosine distance shows a rolling change. PCA shows a single break. We can only see the full picture by combining both axes. A gradual multi-layered reorganization that consolidated into a sharp, representation-agnostic shift at the dawn of the transformer era.
+NLP research focus has changed most decisively at the 2011-2015 to 2016-2021 boundary, marking the consolidation of the transformer era. The full multi-layered cascade pattern is only visible by combining representation methods and comparison metics.
 
 % ── Member 1: TF-IDF findings + open challenge ───────────────────────────
-\TODO{Member 1 — (~120w).
-What the TF-IDF analysis revealed about NLP's evolution.
-Name one open challenge: e.g. how to handle vocabulary change
-that is driven by synonyms rather than new terms.}{120}
 
 TF-IDF analysis reveals how NLP research vocabulary has evolved, showing a decline in statistical terminology, a transitional phase around 2006-2010, and a rapid rise of neural and pre-training related terms after 2011.
 
@@ -575,12 +557,7 @@ A remaining limitation is the inability of TF-IDF to account for semantic contin
 
 
 % ── Member 2: SBERT + LDA findings + open challenge ──────────────────────
-SBERT and LDA extend the TF-IDF findings by showing that NLP's evolution was not only a vocabulary shift, but also a semantic and thematic reorganization. 
-
-SBERT indicates gradual semantic drift across the full periods, while the relatively close distance between 2011-2015 and 2016-2021 suggests that the era of transformer research built on earlier deep learning patterns. LDA supports this by showing a decline of themes related to
-parsing, grammar, and syntactic-structure themes, as well as the rise of themes related to neural architectures, attention, and transformers.
-
-In general, these methods show that the change of vocabulary reflects broader changes in research meaning and thematic composition. One open challenge is explainability: the movement within the embedded space is difficult to explain without investigating, and LDA topic labels require manual judgement.
+SBERT and LDA extend the TF-IDF findings by showing that NLP's evolution was not only a vocabulary shift, but also a semantic and thematic change. SBERT shows gradual semantic drift across the timeline, while the close distance between 2011-2015 and 2016-2021 suggests continuity between deep learning and transformer research. LDA supports this by showing that earlier structural approaches became less dominant, while later research focused more on neural models and transformer-based methods. These results suggest that vocabulary change reflects broader changes in research meaning and topic structure. One open challenge is interpretability: SBERT distances are hard to explain directly, and LDA topic labels require manual judgement.
 
 
 % ── Member 3: Keyword findings + open challenge ───────────────────────────
@@ -590,11 +567,11 @@ Keyword shift analysis revealed a sharp vocabulary transition at the 2011--2015 
 
 % ── Member 4: Cosine distance findings + open challenge ───────────────────
 
-Cosine distance analysis showed that the NLP shift over the years depends on which representation is used to measure it. Applied among four representations, TF-IDF unigram and bigram both indicated the largest vocabulary shift from period 2001-2005 to 2006-2010, SBERT identified the shift one period later 2006-2010 to 2011-2015, and LDA identified the shift one period later 2011-2015 to 2016-2021. This shows that NLP's transformation was not a sudden revolution but a gradual shift, surface vocabulary changed first, followed by semantic meaning, followed by a full reorganization of research topics. One open challenge remains: the corpus is heavily imbalanced, with 88\% of abstracts concentrated in the 2016--2021 period. This raises the question of whether the detected shifts reflect field-wide transitions or are partly an artefact of the growing volume of abstracts in recent years inflating the stability of later period centroids.
+Cosine distance analysis showed that the NLP shift over the years depends on which representation is used to measure it. Applied among four representations, TF-IDF unigram and bigram both indicated the largest vocabulary shift from period 2001-2005 to 2006-2010, SBERT identified the shift one period later 2006-2010 to 2011-2015, and LDA identified the shift one period later 2011-2015 to 2016-2021. One open challenge remains: the corpus is heavily imbalanced, with 88\% of abstracts concentrated in the 2016--2021 period. This raises the question of whether the detected shifts reflect field-wide transitions or are partly an artefact of the growing volume of abstracts in recent years inflating the stability of later period centroids.
 
 % ── Member 5: forward look (final paragraph) ──────────────────────────────
 
-In practice, the best methods balanced sensitivity with clear communication. Looking at our whole pipeline, no single method gave us the complete picture. We got our strongest findings by triangulating across representations and comparing metrics. In lexical space, NLP's pre-transformer history looks like a stable plateau ending in a sudden break. But in semantic and topical space, it appears as a continuous non-linear reorganization. We can only see the cascade pattern in cosine distance by putting all four methods together.
+ The strongest findings came from triangulating across representations and metrics. No single method gave the complete picture. In lexical space, NLP's pre-transformer history looks like a stable plateau ending in a sudden break. But in semantic and topical space, it appears as a continuous non-linear reorganization.
 
 % ═══════════════════════════════════════════════════════════════════════════
 % REFERENCES  (not counted in the 10-page limit)
